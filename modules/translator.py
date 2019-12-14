@@ -4,8 +4,9 @@ from error_logging import error_logger
 from telethon import events, Button
 from typing import Union
 
-bing = MyBingTranslator()
-google = GoogleAPI()
+lang_list = list()
+bing = MyBingTranslator(lang_list)
+google = GoogleAPI(lang_list)
 
 async def init(bot):
     @bot.on(events.NewMessage(pattern=r"^\.tr( [a-z]{:2}(\-)?)?([a-z]{:2})?"))

@@ -6,14 +6,14 @@ import os
 
 class GoogleAPI:
     
-    def __init__(self):
-        self.list_of_used_lang = list()
+    def __init__(self, some_list:list):
+        self.list_of_used_lang = some_list
         self.google_tr = translate.Client.from_service_account_json(os.path.join(os.path.curdir, "utils", "creds.json"))
 
     def google_translate(self, text:str, target='ru'):
         try:
             for each in self.list_of_used_lang:
-                text.replace(each, '')
+                text = text.replace(each, '')
             GOOGLE_LANGUAGES = self.google_tr.get_languages(target_language=target)
             trans = self.google_tr.translate(text, target_language=target)
             tr_text = trans['translatedText']
@@ -38,12 +38,14 @@ class GoogleAPI:
 
 
 class MyBingTranslator:
-    def __init__(self):
-        self.list_of_used_lang = list()
+    def __init__(self, some_list:list):
+        self.list_of_used_lang = some_list
         self.tr = BingTranslator()
 
     def translate(self, text, target='ru', tell_input_lang=False):
         try:
+            for each in self.list_of_used_lang:
+                text = text.replace(each, '')
             try:
                 translation = self.tr.translate(text, target, raw=tell_input_lang)
             except:
@@ -54,8 +56,6 @@ class MyBingTranslator:
                 from_lang = self.tr.translate(from_lang, target)
                 from_lang = f'{from_lang[0].upper()}{from_lang[1:]}:\n'
 
-                for each in self.list_of_used_lang:
-                    text.replace(each, '')
                 if from_lang not in self.list_of_used_lang:
                     self.list_of_used_lang.append(from_lang)
 
