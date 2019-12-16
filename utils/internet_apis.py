@@ -40,6 +40,11 @@ class GoogleAPI:
         trans = self.google_tr.translate(text, target_language='en')
         return trans['detectedSourceLanguage']
 
+    def chop(self, text:str):
+        for each in self.list_of_used_lang:
+            text = text.replace(each, '')
+        return text
+
 class MyBingTranslator:
     def __init__(self, some_list:list):
         self.list_of_used_lang = some_list

@@ -10,11 +10,10 @@ bing = MyBingTranslator(lang_list)
 google = GoogleAPI(lang_list)
 
 async def init(bot):
-    @bot.on(events.NewMessage(pattern=r"^\.tr(\s)?([a-z]{:2}(\-)?)?([a-z]{:2})?"))
+    @bot.on(events.NewMessage(pattern=r"^\.tr(\s)?([a-z][a-z])?(-[a-z][a-z])?"))
     @error_logger
     async def translate_handler(event:Union[Message, events.NewMessage.Event]):
         replied_to:Message = await event.get_reply_message()
-
         if replied_to:
             _to_lang = event.pattern_match.group(2)
             if not _to_lang:
@@ -34,7 +33,7 @@ async def init(bot):
             except:
                 _from_lang = None
             try:
-                _to_lang = event.pattern_match.group(4)
+                _to_lang = event.pattern_match.group(4).replace("-", "")
             except:
                 _to_lang = None
 
@@ -42,20 +41,21 @@ async def init(bot):
     @error_logger
     async def button_pressed(event):
         data:str = event.data.decode("utf-8")
-
         _, _id, _chat, _to_lang = data.split("|")
-        msg = await bot.get_messages(int(_chat), ids=int(_id))
 
         if "try again" in data:
+            msg = await bot.get_messages(int(_chat), ids=int(_id))
             if msg.raw_text:
                 result = bing.translate(msg.raw_text, target=_to_lang, tell_input_lang=True)
                 await event.edit(result, buttons=Button.clear())
-
         elif "make voice" in data:
+            msg = await bot.get_messages(int(event.chat_id), ids=event.message_id)
             if msg.text:
-                voice_file = make_voice(msg.text, _to_lang)
+                edited_text = google.chop(msg.text)
+                voice_file = make_voice(edited_text, _to_lang)
                 file = await bot.upload_file(voice_file)
-                await bot.send_file(_chat, file, voice_note=True, reply_to=_id)
+                await bot.send_file(int(_chat), file, voice_note=True, reply_to=event.message_id)
+                await event.edit(buttons=Button.clear())
 
     @bot.on(events.NewMessage(pattern=r"^/voice$"))
     @error_logger
@@ -64,6 +64,7 @@ async def init(bot):
         if msg:
             if msg.text:
                 lang = google.detect_language(msg.text)
-                voice_file = make_voice(msg.text, lang)
+                edited_text = google.chop(msg.text)
+                voice_file = make_voice(edited_text, lang)
                 file = await bot.upload_file(voice_file)
                 await bot.send_file(event.chat, file, voice_note=True, reply_to=event)
