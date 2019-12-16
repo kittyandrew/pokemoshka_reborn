@@ -41,7 +41,7 @@ async def _new_game(event, sender):
     else:
         games[event.chat_id] = await Game().new_game(sender.id)
 
-    buttons = [[Button.inline("Подивитися слово", f"check word|{sender.id}".encode("utf-8"))],
+    buttons = [[Button.inline("Переглянути слово", f"check word|{sender.id}".encode("utf-8"))],
                [Button.inline("Замінити слово", f"change word|{sender.id}".encode("utf-8"))]]
     await event.respond(f"{sender.first_name} має пояснити слово за 2 хвилини",
                         buttons=buttons)
@@ -66,15 +66,15 @@ async def init(bot):
             elif "change word" in data:
                 await (games[event.chat_id]).new_game(_id)
                 await event.answer(games[event.chat_id].slovo, alert=True)
-            elif "new game" in data:
-                sender = await event.get_sender()
-                if games.get(event.chat_id, None):
-                    if games[event.chat_id].owner and games[event.chat_id].owner != sender.id:
-                        await event.answer("У переможця є 15 секунд, щоб розпочати гру.", alert=True)
-                    else:
-                        await _new_game(event, sender)
+        elif "new game" in data:
+            sender = await event.get_sender()
+            if games.get(event.chat_id, None):
+                if games[event.chat_id].owner and games[event.chat_id].owner != sender.id:
+                    await event.answer("У переможця є 15 секунд, щоб розпочати гру.", alert=True)
                 else:
                     await _new_game(event, sender)
+            else:
+                await _new_game(event, sender)
         else:
             await event.answer("Ти впевнений, що це для тебе?", alert=True)
 
