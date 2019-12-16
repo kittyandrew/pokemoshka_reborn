@@ -55,3 +55,14 @@ async def init(bot):
             voice_file = make_voice(event.text, _to_lang)
             file = await bot.upload_file(voice_file)
             await bot.send_file(_chat, file, voice_note=True, reply_to=_id)
+
+    @bot.on(events.NewMessage(pattern=r"^/voice$"))
+    @error_logger
+    async def to_voice(event):
+        msg = await event.get_reply_message()
+        if msg:
+            if msg.text:
+                lang = google.detect_language(msg.text)
+                voice_file = make_voice(msg.text, lang)
+                file = await bot.upload_file(voice_file)
+                await bot.send_file(event.chat, file, voice_note=True, reply_to=event)

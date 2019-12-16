@@ -36,6 +36,9 @@ class GoogleAPI:
         except Exception as e:
             raise MyGoogleAPIError(f"Google Translation API Error ({e})")
 
+    def detect_language(self, text:str):
+        trans = self.google_tr.translate(text, target_language='en')
+        return trans['detectedSourceLanguage']
 
 class MyBingTranslator:
     def __init__(self, some_list:list):
