@@ -58,7 +58,7 @@ async def init(bot):
                 await bot.send_file(int(_chat), file, voice_note=True, reply_to=event.message_id)
                 await event.edit(buttons=Button.clear())
 
-    @bot.on(events.NewMessage(pattern=r"^/voice$"))
+    @bot.on(events.NewMessage(pattern=r"^(/voice|/voice@pokemonchik_bot)$"))
     @error_logger
     async def to_voice(event):
         msg = await event.get_reply_message()

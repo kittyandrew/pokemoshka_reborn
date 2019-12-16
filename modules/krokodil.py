@@ -5,12 +5,13 @@ from bs4 import BeautifulSoup
 from typing import Union
 import aiohttp
 import asyncio
+import fuckit
 
 class Game:
     def __init__(self):
         self.user_id:int = None
         self.slovo:str = None
-        self.finished:bool = False
+        self.timeout:bool = False
         self.owner:int = None
 
     async def new_game(self, user_id):
@@ -32,6 +33,7 @@ class Game:
     def finish(self):
         self.user_id:str = None
         self.slovo:str = None
+        self.timeout:bool = False
 
 games = {}
 
@@ -45,13 +47,20 @@ async def _new_game(event, sender):
                [Button.inline("Замінити слово", f"change word|{sender.id}".encode("utf-8"))]]
     await event.respond(f"{sender.first_name} має пояснити слово за 2 хвилини",
                         buttons=buttons)
+    #
+    await asyncio.sleep(120)
+    games[event.chat_id].timeout = True
+
 
 async def init(bot):
-    @bot.on(events.NewMessage(pattern=r"^(/krokodil|/krokodil@pokemonchik_bot)"))
+    @bot.on(events.NewMessage(pattern=r"^(/krokodil|/krokodil@pokemonchik_bot)$"))
     @error_logger
     async def new_game(event:Union[Message, events.NewMessage.Event]):
-        sender = await event.get_sender()
-        await _new_game(event, sender)
+        if games[event.chat_id].timeout or not games[event.chat_id].owner:
+            sender = await event.get_sender()
+            await _new_game(event, sender)
+        with fuckit:
+            await event.delete()
 
     @bot.on(events.CallbackQuery())
     @error_logger
@@ -69,7 +78,7 @@ async def init(bot):
         elif "new game" in data:
             sender = await event.get_sender()
             if games.get(event.chat_id, None):
-                if games[event.chat_id].owner and games[event.chat_id].owner != sender.id:
+                if games[event.chat_id].owner and games[event.chat_id].owner != _id:
                     await event.answer("У переможця є 15 секунд, щоб розпочати гру.", alert=True)
                 else:
                     await _new_game(event, sender)
