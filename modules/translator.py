@@ -41,14 +41,15 @@ async def init(bot):
     @error_logger
     async def button_pressed(event):
         data:str = event.data.decode("utf-8")
-        _, _id, _chat, _to_lang = data.split("|")
 
         if "try again" in data:
+            _, _id, _chat, _to_lang = data.split("|")
             msg = await bot.get_messages(int(_chat), ids=int(_id))
             if msg.raw_text:
                 result = bing.translate(msg.raw_text, target=_to_lang, tell_input_lang=True)
                 await event.edit(result, buttons=Button.clear())
         elif "make voice" in data:
+            _, _id, _chat, _to_lang = data.split("|")
             msg = await bot.get_messages(int(event.chat_id), ids=event.message_id)
             if msg.text:
                 edited_text = google.chop(msg.text)
