@@ -56,9 +56,14 @@ async def init(bot):
     @bot.on(events.NewMessage(pattern=r"^(/krokodil|/krokodil@pokemonchik_bot)$"))
     @error_logger
     async def new_game(event:Union[Message, events.NewMessage.Event]):
-        if games[event.chat_id].timeout or not games[event.chat_id].owner:
+        if games.get(event.chat_id, None):
+            if games[event.chat_id].timeout or not games[event.chat_id].owner:
+                sender = await event.get_sender()
+                await _new_game(event, sender)
+        else:
             sender = await event.get_sender()
             await _new_game(event, sender)
+
         with fuckit:
             await event.delete()
 
