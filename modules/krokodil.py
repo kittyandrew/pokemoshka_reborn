@@ -71,8 +71,9 @@ async def init(bot):
     @error_logger
     async def krokodil_button(event):
         data: str = event.data.decode("utf-8")
-        _, _id = data.split("|")
-        _id = int(_id)
+        _, *_id = data.split("|")
+        with fuckit:
+            _id = int(_id)
 
         if event.sender_id == _id:
             if "check word" in data:
