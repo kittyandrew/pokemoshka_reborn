@@ -57,7 +57,7 @@ async def init(bot):
     @error_logger
     async def new_game(event:Union[Message, events.NewMessage.Event]):
         if games.get(event.chat_id, None):
-            if games[event.chat_id].timeout or (not games[event.chat_id].owner and games[event.chat_id].slovo):
+            if games[event.chat_id].timeout or (not games[event.chat_id].owner and not games[event.chat_id].slovo):
                 sender = await event.get_sender()
                 await _new_game(event, sender)
         else:
