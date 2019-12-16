@@ -4,7 +4,6 @@ from telethon import events
 from io import BytesIO
 from gtts import gTTS
 import asyncio
-import aiohttp
 import io
 
 
