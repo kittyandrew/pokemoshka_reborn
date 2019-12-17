@@ -7,7 +7,7 @@ class TelethonManager:
 
     def __init__(self, loop=None):
         self.loop = loop
-        self.client = TelegramClient(session=f'pokemoshka', api_hash="a02ade04381a34dfce7db9bf23e62926", api_id="906668", loop=self.loop)
+        self.client = TelegramClient(session=f'pokemoshka', api_hash="a3406de8d171bb422bb6ddf3bbd800e2", api_id="94575", loop=self.loop)
 
     def start(self):
 
