@@ -14,3 +14,4 @@ Dockerfile
 config.py
 test-development/
 archived/
+*.json
