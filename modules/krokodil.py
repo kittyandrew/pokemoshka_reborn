@@ -75,16 +75,16 @@ async def init(bot):
         with fuckit:
             _id = int(_id[0])
 
-        if event.sender_id == _id:
-            if "check word" in data:
+        if event.sender_id == _:
+            if "check word" == _:
                 await event.answer(games[event.chat_id].slovo, alert=True)
-            elif "change word" in data:
+            elif "change word" == _:
                 await (games[event.chat_id]).new_game(_id)
                 await event.answer(games[event.chat_id].slovo, alert=True)
-        elif "new game" in data:
+        elif "new game" == _:
             sender = await event.get_sender()
             if games.get(event.chat_id, None):
-                if games[event.chat_id].owner and games[event.chat_id].owner != _id:
+                if games[event.chat_id].owner != _id:
                     await event.answer("У переможця є 15 секунд, щоб розпочати гру.", alert=True)
                 else:
                     await _new_game(event, sender)
@@ -95,7 +95,7 @@ async def init(bot):
 
     @bot.on(events.NewMessage())
     @error_logger
-    async def new_game(event: Union[Message, events.NewMessage.Event]):
+    async def new_message(event: Union[Message, events.NewMessage.Event]):
         if event.chat_id in games:
             if games[event.chat_id].guess(event.text.lower(), event.sender_id):
                 sender = await event.get_sender()
