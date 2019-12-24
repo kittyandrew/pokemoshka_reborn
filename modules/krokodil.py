@@ -25,7 +25,7 @@ class Game:
                 return self
 
     def guess(self, word, user_id):
-        result = word == self.slovo
+        result = (word == self.slovo)
         if result:
             self.owner = user_id
         return result
@@ -73,7 +73,7 @@ async def init(bot):
         data: str = event.data.decode("utf-8")
         _, *_id = data.split("|")
         with fuckit:
-            _id = int(_id)
+            _id = int(_id[0])
 
         if event.sender_id == _id:
             if "check word" in data:
