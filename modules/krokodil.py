@@ -75,7 +75,7 @@ async def init(bot):
         with fuckit:
             _id = int(_id[0])
 
-        if event.sender_id == _:
+        if event.sender_id == _id:
             if "check word" == _:
                 await event.answer(games[event.chat_id].slovo, alert=True)
             elif "change word" == _:
