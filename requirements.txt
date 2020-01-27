@@ -4,3 +4,4 @@ gTTS==2.1.1
 google-cloud-translate==2.0.0
 aiohttp>=3.6.2
 PyBinglate>=0.2
+fuckit>=4.8.1
