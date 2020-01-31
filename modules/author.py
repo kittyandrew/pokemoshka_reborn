@@ -10,7 +10,7 @@ MSG = \
 """Author: `Andrew Pythonista`
 `username:` @kitty_andrew
 `github:` [kittyandrew](https://www.github.com/kittyandrew)
-`fiverr: [buy bot](https://www.fiverr.com/kitty_andrew?up_rollout=true)"""
+`fiverr:` [buy bot](https://www.fiverr.com/kitty_andrew?up_rollout=true)"""
 
 async def init(bot):
     @bot.on(events.NewMessage(pattern=r"^(/author|/author@pokemonchik_bot)$"))
