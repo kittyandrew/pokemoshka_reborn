@@ -13,7 +13,7 @@ MSG = \
 `fiverr:` [buy bot](https://www.fiverr.com/kitty_andrew?up_rollout=true)"""
 
 async def init(bot):
-    @bot.on(events.NewMessage(pattern=r"^/author($|/@pokemonchik_bot$)"))
+    @bot.on(events.NewMessage(pattern=r"^/author($|@pokemonchik_bot$)"))
     @error_logger
     async def author_handler(event):
         if chats.get(event.chat_id, None):
