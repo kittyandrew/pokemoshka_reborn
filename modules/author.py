@@ -17,7 +17,7 @@ async def init(bot):
     @error_logger
     async def author_handler(event):
         if chats.get(event.chat_id, None):
-            delta = chats[event.chat_id] - time.time()
+            delta = time.time() - chats[event.chat_id]
             if delta > 60:
                 await event.respond(MSG, link_preview=False)
                 chats[event.chat_id] = time.time()
